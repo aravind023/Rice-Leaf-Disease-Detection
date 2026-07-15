@@ -1,4 +1,3 @@
-
 import streamlit as st
 import tensorflow as tf
 import numpy as np
@@ -22,7 +21,17 @@ st.markdown("### AI Powered Rice Disease Classification")
 # -----------------------------
 @st.cache_resource
 def load_model():
-    return tf.keras.models.load_model("best_rice_leaf_model.keras")
+    try:
+        return tf.keras.models.load_model("best_rice_leaf_model.keras")
+    except Exception as e:
+        st.error(
+            "⚠️ Model failed to load. This usually means the TensorFlow/Keras "
+            "version installed here doesn't match the version the model was "
+            "trained with. Check that requirements.txt pins the exact same "
+            "tensorflow version used in the training notebook."
+        )
+        st.exception(e)
+        st.stop()
 
 model = load_model()
 
@@ -84,3 +93,4 @@ if uploaded_file is not None:
 
 st.markdown("---")
 st.caption("Developed by Aravindhan")
+st.caption("🔗 [View source on GitHub](https://github.com/aravind023/Rice-Leaf-Disease-Detection)")
